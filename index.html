@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ua">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <title>Вовкин чат</title>
+    <style>
+        body {
+            background: #fcfcfc;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="navbar navbar-dark bg-dark shadow-sm">
+            <div class="container d-flex justify-content-between">
+                <a href="#" class="navbar-brand d-flex align-items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
+                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="mr-2"
+                        viewBox="0 0 24 24" focusable="false">
+                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z">
+                        </path>
+                        <circle cx="12" cy="13" r="4"></circle>
+                    </svg>
+                    <strong>Вовкин чат </strong>
+                </a>
+                <button class="navbar-toggler" type="button">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="py-5 text-center">
+            <h2>Chat for web</h2>
+            <p class="lead">Вкажіть ваше ім’я і починайте переписку</p>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <h3>Форма повідомлень</h3>
+                <form id="messForm">
+                    <label for="name">Ім’я</label>
+                    <input type="text" name="name" id="name" placeholder="Введіть ім’я" class="form-control">
+                    <br>
+                    <label for="message">Повідомлення</label>
+                    <textarea name="message" id="message" class="form-control" placeholder="Введіть повідомлення"
+                        cols="30" rows="10"></textarea>
+                    <br>
+                    <input type="submit" value="Надіслати" class="btn btn-danger">
+                </form>
+            </div>
+            <div class="col-6">
+                <h3>Повідомлення</h3>
+                <div id="all_mess"></div>
+            </div>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var min = 1;
+        var max = 6;
+        var random = Math.floor(Math.random() * (max - min)) + min;
+
+        var alertClass;
+        switch (random) {
+            case 1:
+                alertClass = 'secondary';
+                break;
+            case 2:
+                alertClass = 'danger';
+                break;
+            case 3:
+                alertClass = 'success';
+                break;
+            case 4:
+                alertClass = 'warning';
+                break;
+            case 5:
+                alertClass = 'info';
+                break;
+            case 6:
+                alertClass = 'light';
+                break;
+            case 7:
+                alertClass = 'dark';
+                break;
+            case 8:
+                alertClass = 'primary';
+                break;
+        }
+    </script>
+
+
+    <script>
+        var socket = io.connect();
+        var $form = $("#messForm");
+        var $name = $("#name");
+        var $textarea = $("#message");
+        var $all_messages = $("#all_mess");
+
+        $form.submit(function (event) {
+            event.preventDefault();
+            socket.emit('send mess', { mess: $textarea.val(), name: $name.val(), className: alertClass});
+            $textarea.val('');
+        });
+
+        socket.on('add mess', function (data) {
+            $all_messages.append("<div class='alert alert-" + data.className + "''><b>" + data.name + "</b>: " + data.mess + "</div>");
+        });
+    </script>
+</body>
+
+</html>
