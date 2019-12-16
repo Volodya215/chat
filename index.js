@@ -14,6 +14,7 @@ app.get('/', function (request, respons) {
 
 users = [];
 connections = [];
+ 
 
 var user;
 
