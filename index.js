@@ -29,8 +29,7 @@ io.sockets.on('connection', function (socket) {
     socket.on('send mess', function (data) {
         io.sockets.emit('add mess', { mess: data.mess, name: data.name, className: data.className });
         user = { mess: data.mess, name: data.name, className: data.className };
-
-        MongoClient.connect("mongodb://localhost", function (err, client) {
+        MongoClient.connect("mongodb+srv://vovka:vovka@cluster0-ezstr.mongodb.net/test?retryWrites=true&w=majority", function (err, client) {
             if (err) throw err;
             var db = client.db("userCollectionDB");
 
@@ -46,7 +45,7 @@ io.sockets.on('connection', function (socket) {
     });
 
     socket.on('get hist', function () {
-        MongoClient.connect("mongodb://localhost", function (err, client) {
+        MongoClient.connect("mongodb+srv://vovka:vovka@cluster0-ezstr.mongodb.net/test?retryWrites=true&w=majority", function (err, client) {
             if (err) throw err;
 
             var db = client.db("userCollectionDB");
