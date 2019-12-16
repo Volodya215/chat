@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="main.css">
     <title>Вовкин чат</title>
     <style>
         body {
@@ -60,11 +61,49 @@
             </div>
         </div>
     </div>
+    <!-- 
+    <center>
+        <A href="history.html" onmouseover="img(1, 1)" onmouseout="img(1,0)">Переглянути історію</A>
+    </center> -->
+
+    <br><br>
+    <h3>Історія переписок</h3>
+
+
+    <form id="butn">
+        <input type="submit" value=Переглянути class="btn btn-danger">
+    </form><br>
+    <form id="clear">
+        <input type="submit" value=Очистити class="btn btn-danger">
+    </form><br>
+
+    <div id="AAAAh" name="mess"></div><br><br>
+
+
+
+    <script src="history.js"></script>
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="/__/firebase/7.5.2/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+         https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="/__/firebase/7.5.2/firebase-analytics.js"></script>
+
+    <!-- Initialize Firebase -->
+    <script src="/__/firebase/init.js"></script>
+
+    <!-- Add Firebase products that you want to use -->
+    <script src="/__/firebase/7.5.2/firebase-auth.js"></script>
+    <script src="/__/firebase/7.5.2/firebase-firestore.js"></script>
+
+
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script>
         var min = 1;
-        var max = 6;
+        var max = 8;
         var random = Math.floor(Math.random() * (max - min)) + min;
 
         var alertClass;
@@ -103,17 +142,67 @@
         var $name = $("#name");
         var $textarea = $("#message");
         var $all_messages = $("#all_mess");
+        var $AAAAh = $("#AAAAh");
+        var $butn = $("#butn");
+        var $clear = $("#clear");
 
         $form.submit(function (event) {
             event.preventDefault();
-            socket.emit('send mess', { mess: $textarea.val(), name: $name.val(), className: alertClass});
+            socket.emit('send mess', { mess: $textarea.val(), name: $name.val(), className: alertClass });
             $textarea.val('');
         });
 
         socket.on('add mess', function (data) {
             $all_messages.append("<div class='alert alert-" + data.className + "''><b>" + data.name + "</b>: " + data.mess + "</div>");
         });
+
+
+        $butn.submit(function (event) {
+            event.preventDefault();
+            socket.emit("get hist");
+        });
+
+        socket.on('add hist', function (data) {
+            $AAAAh.append("<div class='alert alert-" + data.className + "''><b>" + data.name + "</b>: " + data.mess + "</div>");
+        });
+
+        $clear.submit(function (event) {
+            event.preventDefault();
+            $AAAAh.empty();
+        });
     </script>
+
+
+    <!-- <script>
+        var MongoClient = require('mongodb').MongoClient;
+        //var format = require('util').format;
+
+        var url = "mongodb://localhost:27017/userCollectionDB";
+
+
+        MongoClient.connect("mongodb://localhost", function (err, client) {
+            if (err) throw err;
+
+            var db = client.db("userCollectionDB");
+            //var collection = db.collection('users');
+            var collection = db.collection("users");
+
+            //var user = {mess : "Hello", name : "Bob", className : "primary"};
+
+            var cursor = collection.find();
+
+            cursor.toArray(function (err, res) {
+
+                res.forEach(element => {
+                    //console.log("dfdfdfssfsdfsfsd");
+                    $AAAAh.append("<div class='alert alert-" + element.className + "''><b>" + element.name + "</b>: " + element.mess + "</div>");
+                });
+
+                //console.log(res[0]);
+                client.close();
+            })
+        });
+    </script> -->
 </body>
 
 </html>
