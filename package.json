@@ -7,6 +7,12 @@
     "start": "node index",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "engines": {
+    
+      "npm" : "~6.12.0",
+      "node" : "~12.13.0"
+    
+  },
   "repository": {
     "type": "git",
     "url": "Volodya215"
@@ -18,4 +24,5 @@
     "mongod": "^2.0.0",
     "socket.io": "^2.3.0"
   }
+
 }
