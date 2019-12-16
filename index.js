@@ -5,8 +5,9 @@ var io = require('socket.io').listen(server);
 
 var MongoClient = require('mongodb').MongoClient;
 
+const PORT = process.env.PORT || 3000
 
-server.listen(3000);
+server.listen(PORT);
 
 app.get('/', function (request, respons) {
     respons.sendFile(__dirname + '/index.html');
